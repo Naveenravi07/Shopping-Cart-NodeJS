@@ -6,10 +6,11 @@ var logger = require('morgan');
 const { engine: hbs } = require("express-handlebars");
 const db = require('./config/dbConnect')
 const session = require('express-session')
+const fileUpload=require('express-fileupload')
 
 //Db Connection
 db.connect((err) => {
-  if (err) return console.log('Connection To Db Failed'+err);
+  if (err) return console.log('Connection To Db Failed' + err);
   else {
     console.log("Database Connected Successfully To Port 27017");
   }
@@ -27,11 +28,12 @@ app.engine('hbs', hbs({ extname: 'hbs', defaultLayout: 'layout', layoutsDir: __d
 
 //Sessioning
 
-app.use(session({ secret: "key", cookie: { maxAge:180 * 60 * 1000} }));
+app.use(session({ secret: "key", cookie: { maxAge: 180 * 60 * 1000 } }));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(fileUpload())
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);

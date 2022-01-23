@@ -2,7 +2,22 @@
 
 <div class="container">
     <div class="row">
- 
+        <div class="col-12 sm-12 md-6 lg-4 xl-3" style="padding-top: 40px;">
+
+            {{#if products}}
+            {{#each products}}
+            <div class="card" style="width: 18rem; display: inline-block; padding: 20px;">
+                <img src="/images/product-images/{{this._id}}.jpg" class="card-img-top" style="height: 290px;"
+                    alt="...">
+                <div class="card-body">
+                    <h5 class="card-title"> {{this.name}} </h5>
+                    <p class="card-text"> {{this.category}} </p>
+                    <a href="#" class="btn btn-primary"> {{this.price}} </a>
+                </div>
+            </div>
+            {{/each}}
+            {{/if}}
+
+        </div>
     </div>
-</div>
 </div>
