@@ -3,11 +3,13 @@ var router = express.Router();
 var db = require('../config/dbConnect')
 var Helpers = require('../Helpers/userHelper')
 var fs = require('fs')
-var productHelpers = require('../Helpers/product-Helpers')
+var productHelpers = require('../Helpers/product-Helpers');
 
-/* GET users listing. */
-router.get('/', function (req, res, next) {
-    res.render('admin/admin')
+
+router.get('/', async function (req, res, next) {
+    let products = await productHelpers.getAllProducts().then((items) => {
+        res.render('admin/admin', { items })
+    })
 });
 
 //Add Products To DB
@@ -22,7 +24,7 @@ router.post('/add-products', (req, res) => {
         let image = req.files.image
         image.mv('./public/images/product-images/' + id + '.jpg', (err) => {
             if (!err) {
-                res.render('admin/admin')
+                res.redirect('/admin')
             } else {
                 console.log("err" + err);
             }
@@ -30,5 +32,48 @@ router.post('/add-products', (req, res) => {
     })
 })
 
+//Edit Product Router
 
+router.get('/edit-product/:id', (req, res) => {
+    let proId = req.params.id
+    productHelpers.getProductDetails(proId).then((product) => {
+        res.render('admin/edit-product', { product })
+    })
+
+})
+
+router.post('/edit-product/:id', (req, res) => {
+    let proId = req.params.id
+    productHelpers.updateProduct(proId, req.body).then((response) => {
+        if (req.files) {
+            let image = req.files.image
+            fs.unlink("./public/images/product-images/" + proId + ".jpg", (error) => {
+                if (error) throw error
+                console.log("error" + error);
+            })
+            image.mv('./public/images/product-images/' + proId + ".jpg", (err) => {
+                if (err) {
+                    console.log("error while adding image " + err);
+                } else {
+                    res.redirect('/admin')
+                }
+            })
+        }else{
+            res.redirect('/admin')
+        }
+    })
+})
+
+//Delete Product Router
+
+router.get('/delete-product/:id', (req, res) => {
+    let proId = req.params.id
+    productHelpers.deleteProduct(proId).then((response) => {
+        res.redirect('/admin')
+    })
+    fs.unlink("./public/images/product-images/" + proId + ".jpg", (error) => {
+        if (error) throw error
+    })
+
+})
 module.exports = router;

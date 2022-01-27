@@ -25,8 +25,11 @@ router.get('/login', (req, res) => {
   if (req.session.loggedIn) {
     let user = req.session.user
     res.render('index', { user })
-  } else
-    res.render('login/login')
+  } else {
+    res.render('login/login', { "loginErr": req.session.loginErr })
+    req.session.loginErr = null
+  }
+
 })
 
 //Login Data Verification
@@ -38,7 +41,8 @@ router.post('/login', (req, res) => {
       req.session.loggedIn = true;
       res.redirect('/')
     } else {
-      res.render('login/login')
+      req.session.loginErr = true
+      res.redirect('/login')
     }
   })
 })
@@ -65,7 +69,7 @@ router.post('/signup', (req, res) => {
 //Logout
 router.get('/logout', (req, res) => {
   req.session.destroy()
-  res.render('index')
+  res.redirect('/')
 })
 
 module.exports = router;

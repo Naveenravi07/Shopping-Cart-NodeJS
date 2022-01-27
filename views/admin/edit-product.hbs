@@ -1,0 +1,77 @@
+{{>admin-header}}
+<div class="container">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="login-container">
+                <div class="login-form">
+                    <h1 class="header">EDIT PRODUCT</h1>
+                    <form action="/admin/edit-product/{{product._id}}" enctype="multipart/form-data" method="POST">
+                        <div class="input-section">
+                            <label>Name</label>
+                            <input type="text" name="name" value="{{product.name}}">
+                        </div>
+                        <div class="input-section">
+                            <label>Brand</label>
+                            <input type="text" name="brand" value="{{product.brand}}">
+                        </div>
+                        <div class="input-section">
+                            <label>Category</label>
+                            <input type="text" name="category" value="{{product.category}}">
+                        </div>
+                        <div class="input-section">
+                            <label>Description</label>
+                            <input type="text" name="description" value="{{product.description}}">
+                        </div>
+                        <div class="input-section">
+                            <label>Price</label>
+                            <input type="text" name="price" value="{{product.price}}">
+                        </div>
+                        <div class="formimage">
+                            <img class="formimage" src="/images/product-images/{{product._id}}.jpg" alt="">
+                        </div>
+                        <div class="formimage">
+                            <label class="input-section">Image</label>
+                            <input type="file" name="image" class="formimage">
+                        </div>
+                        <input class="submitbtn" type="submit" value="Update">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .header {
+        text-align: center;
+        padding-top: 80px;
+        font-size: 50px;
+        padding-bottom: 30px;
+    }
+
+    .input-section {
+        padding: 20px;
+        width: 100%;
+    }
+
+    form input {
+        width: 100%;
+        height: 40px;
+    }
+
+    .submitbtn {
+        border-radius: 10px;
+        background-color: green;
+        font-size: 20px;
+        color: white;
+        height: 45px;
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+
+    .formimage {
+        height: 100px;
+        width: 100px;
+
+    }
+</style>
