@@ -2,8 +2,19 @@ var express = require('express');
 var router = express.Router();
 var db = require('../config/dbConnect')
 var Helpers = require('../Helpers/userHelper')
-var productHelpers = require('../Helpers/product-Helpers')
+var productHelpers = require('../Helpers/product-Helpers');
+const userHelper = require('../Helpers/userHelper');
 
+
+//MiddileWare For verify Login
+
+function verifyUserLogin(req, res, next) {
+  if (req.session.loggedIn) {
+    next()
+  } else {
+    res.redirect('/login')
+  }
+}
 /* GET home page. */
 router.get('/', async function (req, res, next) {
 
@@ -62,7 +73,7 @@ router.post('/signup', (req, res) => {
   Helpers.doSignup(req.body).then((user) => {
     req.session.loggedIn = true
     req.session.user = user
-    res.render('index', { user })
+    res.redirect('/')
   })
 })
 
@@ -70,6 +81,33 @@ router.post('/signup', (req, res) => {
 router.get('/logout', (req, res) => {
   req.session.destroy()
   res.redirect('/')
+})
+
+
+//Add to Cart Router
+
+router.get('/add-to-cart/:id', verifyUserLogin, (req, res) => {
+  let id = req.params.id
+  console.log(id);
+  userHelper.addToCart(id, req.session.user._id).then(() => {
+    console.log("product Added");
+  })
+
+})
+
+//Cart Router
+
+router.get('/cart', verifyUserLogin, async (req, res) => {
+  let cartItems = Helpers.cartChecker(req.session.user._id).then((response) => {
+    if (response.state) {
+       Helpers.getCartProducts(req.session.user._id).then((products) => {
+        res.render('users/cart', { products })
+      })
+    } else {
+      console.log("no Item in cart");
+      res.redirect('/')
+    }
+  })
 })
 
 module.exports = router;

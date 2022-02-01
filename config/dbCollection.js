@@ -2,5 +2,7 @@ var db =require('../config/dbConnect')
 
 module.exports={
     USER_COLLECTION:'users',
-    PRODUCTS_COLLECTION:'products'
+    PRODUCTS_COLLECTION:'products',
+    CART_COLLECTION:'carts'
+
 }

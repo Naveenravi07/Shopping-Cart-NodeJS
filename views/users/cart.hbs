@@ -1,0 +1,59 @@
+<div class="cart_section">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1">
+                <div class="cart_container">
+                    <div class="cart_title">Shastri Cart <img src="/images/cartimg.jpg" style="height: 100px; width: 100px;" alt=""></div>
+
+                    {{#if products}}
+                    {{#each products}}
+
+                    <div class="cart_items">
+                        <ul class="cart_list">
+                            <li class="cart_item clearfix">
+                                <div class="cart_item_image"><img src="/images/product-images/{{this._id}}.jpg" alt=""></div>
+                                <div class="cart_item_info d-flex flex-md-row flex-column justify-content-between">
+                                    <div class="cart_item_name cart_info_col">
+                                        <div class="cart_item_title">Name</div>
+                                        <div class="cart_item_text"> {{this.name}} </div>
+                                    </div>
+                                    <div class="cart_item_color cart_info_col">
+                                        <div class="cart_item_title">Brand</div>
+                                        <div class="cart_item_text"> {{this.brand}} </div>
+                                    </div>
+                                    <div class="cart_item_quantity cart_info_col">
+                                        <div class="cart_item_title">Quantity</div>
+                                        <div class="cart_item_text">1</div>
+                                    </div>
+                                    <div class="cart_item_price cart_info_col">
+                                        <div class="cart_item_title">Description</div>
+                                        <div class="cart_item_text"> {{this.description}} </div>
+                                    </div>
+                                    <div class="cart_item_total cart_info_col">
+                                        <div class="cart_item_title">Price</div>
+                                        <div class="cart_item_text">₹ {{this.price}} </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                {{/each}}
+                {{/if}}
+
+
+                    <div class="order_total">
+                        <div class="order_total_content text-md-right">
+                            <div class="order_total_title">Order Total:</div>
+                            <div class="order_total_amount">₹22000</div>
+                        </div>
+                    </div>
+                    <div class="cart_buttons"> <button type="button" class="button cart_button_clear">Continue
+                            Shopping</button> <button type="button" class="button cart_button_checkout">GO TO 
+                            HOME</button> </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet" href="/stylesheets/cart.css">

@@ -13,7 +13,7 @@
                     <h5 class="card-title"> {{this.name}} </h5>
                        <h6 class="card-title"> {{this.brand}} </h6>
                     <p class="card-text"> {{this.description}} </p>
-                    <a href="#" style="width: 100%;" class="btn btn-primary"> {{this.price}} </a>
+                    <a href="/add-to-cart/{{this._id}}" style="width: 100%;" class="btn btn-primary"> {{this.price}} </a>
                 </div>
             </div>
             {{/each}}
@@ -22,3 +22,16 @@
         </div>
     </div>
 </div>
+
+<style>
+    .card {
+         transform: scale(1.1);
+    
+      transition: transform .5s;
+}
+
+.card:hover {
+   transform: scale(1.15);
+   
+}
+</style>
