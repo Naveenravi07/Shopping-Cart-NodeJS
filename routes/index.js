@@ -19,9 +19,10 @@ function verifyUserLogin(req, res, next) {
 router.get('/', async function (req, res, next) {
 
   if (req.session.loggedIn) {
+    let cartCount = await Helpers.getCartCount(req.session.user._id)
     let products = await productHelpers.getAllProducts()
     let user = req.session.user
-    res.render('index', { user, products });
+    res.render('index', { user, products, cartCount });
 
   } else {
     let products = await productHelpers.getAllProducts()
@@ -86,11 +87,10 @@ router.get('/logout', (req, res) => {
 
 //Add to Cart Router
 
-router.get('/add-to-cart/:id', verifyUserLogin, (req, res) => {
+router.get('/add-to-cart/:id',verifyUserLogin, async(req, res) => {
   let id = req.params.id
-  console.log(id);
-  userHelper.addToCart(id, req.session.user._id).then(() => {
-    console.log("product Added");
+  await userHelper.addToCart(id, req.session.user._id).then(() => {
+    res.json({ status: true })
   })
 
 })
@@ -100,7 +100,7 @@ router.get('/add-to-cart/:id', verifyUserLogin, (req, res) => {
 router.get('/cart', verifyUserLogin, async (req, res) => {
   let cartItems = Helpers.cartChecker(req.session.user._id).then((response) => {
     if (response.state) {
-       Helpers.getCartProducts(req.session.user._id).then((products) => {
+      Helpers.getCartProducts(req.session.user._id).then((products) => {
         res.render('users/cart', { products })
       })
     } else {

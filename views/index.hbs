@@ -7,13 +7,13 @@
             {{#if products}}
             {{#each products}}
             <div class="card" style="width: 18rem; display: inline-block; padding: 20px;">
-                <img src="/images/product-images/{{this._id}}.jpg" class="card-img-top" style="height: 290px;"
+                <img src="/images/product-images/{{this._id}}.jpg" class="card-img-top" style="height: 200px;"
                     alt="...">
                 <div class="card-body">
                     <h5 class="card-title"> {{this.name}} </h5>
                        <h6 class="card-title"> {{this.brand}} </h6>
                     <p class="card-text"> {{this.description}} </p>
-                    <a href="/add-to-cart/{{this._id}}" style="width: 100%;" class="btn btn-primary"> {{this.price}} </a>
+                  <button class="btn btn-primary" onclick="addToCart('{{this._id}}') ">ADD TO CART</button>
                 </div>
             </div>
             {{/each}}
@@ -27,11 +27,13 @@
     .card {
          transform: scale(1.1);
     
-      transition: transform .5s;
+      transition: transform 1s;
 }
 
 .card:hover {
-   transform: scale(1.15);
+   transform: scale(1.125);
    
 }
 </style>
+
+<script src="/javascripts/script.js"></script>
