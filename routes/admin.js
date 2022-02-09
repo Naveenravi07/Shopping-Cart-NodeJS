@@ -58,7 +58,7 @@ router.post('/edit-product/:id', (req, res) => {
                     res.redirect('/admin')
                 }
             })
-        }else{
+        } else {
             res.redirect('/admin')
         }
     })
@@ -75,5 +75,18 @@ router.get('/delete-product/:id', (req, res) => {
         if (error) throw error
     })
 
+})
+
+router.get('/manage-users', async (req, res) => {
+    let user = await Helpers.getAllUsers().then((users) => {
+        res.render('admin/all-users', { users })
+    })
+})
+
+router.get('/delete-user/:id', async (req, res) => {
+    let userid = req.params.id
+    await Helpers.deleteUser(userid).then((response) => {
+        res.redirect('/admin/manage-users')
+    })
 })
 module.exports = router;

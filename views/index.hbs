@@ -1,39 +1,43 @@
-{{>user-header}}
+<div class="root">
+    {{>user-header}}
 
-<div class="container">
-    <div class="row">
-        <div class="col-12 sm-12 md-6 lg-4 xl-3" style="padding-top: 40px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 sm-12 md-6 lg-4 xl-3" style="padding-top: 40px;">
 
-            {{#if products}}
-            {{#each products}}
-            <div class="card" style="width: 18rem; display: inline-block; padding: 20px;">
-                <img src="/images/product-images/{{this._id}}.jpg" class="card-img-top" style="height: 200px;"
-                    alt="...">
-                <div class="card-body">
-                    <h5 class="card-title"> {{this.name}} </h5>
-                       <h6 class="card-title"> {{this.brand}} </h6>
-                    <p class="card-text"> {{this.description}} </p>
-                  <button class="btn btn-primary" onclick="addToCart('{{this._id}}') ">ADD TO CART</button>
+                {{#if products}}
+                {{#each products}}
+                <div class="card" style="width: 18rem; display: inline-block; padding: 20px;">
+                    <img src="/images/product-images/{{this._id}}.jpg" class="card-img-top" style="height: 250px;"
+                        alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title"> {{this.name}} </h5>
+                        <h6 class="card-title"> {{this.brand}} </h6>
+                        <p class="card-text"> {{this.description}} </p>
+                        <button class="btn btn-primary" style="width: 100%;"
+                            onclick="addToCart('{{this._id}}') ">{{this.price}}</button>
+                    </div>
                 </div>
-            </div>
-            {{/each}}
-            {{/if}}
+                {{/each}}
+                {{/if}}
 
+            </div>
         </div>
     </div>
 </div>
-
 <style>
     .card {
-         transform: scale(1.1);
-    
-      transition: transform 1s;
-}
+        margin-top: 40px;
+      spacer
+    }
 
-.card:hover {
-   transform: scale(1.125);
-   
-}
+    .card:hover {}
+
+    .root {
+        background-color: #373e98;
+        min-height: 100vh;
+        height: auto;
+    }
 </style>
 
 <script src="/javascripts/script.js"></script>

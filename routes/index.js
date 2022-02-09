@@ -36,7 +36,7 @@ router.get('/', async function (req, res, next) {
 router.get('/login', (req, res) => {
   if (req.session.loggedIn) {
     let user = req.session.user
-    res.render('index', { user })
+    res.redirect('/')
   } else {
     res.render('login/login', { "loginErr": req.session.loginErr })
     req.session.loginErr = null
@@ -63,8 +63,7 @@ router.post('/login', (req, res) => {
 
 router.get('/signup', (req, res) => {
   if (req.session.loggedIn) {
-    let user = req.session.user
-    res.render('index', { user })
+  res.redirect('/')
   } else
     res.render('login/signup')
 })
@@ -87,7 +86,7 @@ router.get('/logout', (req, res) => {
 
 //Add to Cart Router
 
-router.get('/add-to-cart/:id',verifyUserLogin, async(req, res) => {
+router.get('/add-to-cart/:id', verifyUserLogin, async (req, res) => {
   let id = req.params.id
   await userHelper.addToCart(id, req.session.user._id).then(() => {
     res.json({ status: true })
@@ -95,12 +94,14 @@ router.get('/add-to-cart/:id',verifyUserLogin, async(req, res) => {
 
 })
 
+
 //Cart Router
 
 router.get('/cart', verifyUserLogin, async (req, res) => {
   let cartItems = Helpers.cartChecker(req.session.user._id).then((response) => {
     if (response.state) {
-      Helpers.getCartProducts(req.session.user._id).then((products) => {
+      let userId = req.session.user._id
+      Helpers.getCartProducts(userId).then((products) => {
         res.render('users/cart', { products })
       })
     } else {
@@ -110,4 +111,22 @@ router.get('/cart', verifyUserLogin, async (req, res) => {
   })
 })
 
+//Profile Router
+router.get('/profile', verifyUserLogin, async (req, res) => {
+  let userId = req.session.user._id
+  let userDetails = Helpers.getProfileDetails(userId)
+  res.render('users/profile', { userDetails })
+})
+
+
+//Remove Item from cart
+
+router.get('/removecartitem/:id', verifyUserLogin, async (req, res) => {
+  let id = req.params.id
+  let userId = await req.session.user._id;
+  let cartInfo = await Helpers.deleteCartItem(userId, id).then((response) => {
+    res.redirect('/cart')
+  })
+
+})
 module.exports = router;

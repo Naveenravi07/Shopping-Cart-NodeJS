@@ -20,7 +20,7 @@
                     {{#if items}}
                     {{#each items}}
                     <tr>
-                        <th scope="row"></th>
+                        <td style="padding-left: 15px; padding-top: 40px;"></td>
                         <td style="padding-left: 15px; padding-top: 40px;"> {{this.name}} </td>
                         <td style="padding-left: 45px; padding-top: 40px;"> {{this.brand}} </td>
                         <td style="padding-left: 45px; padding-top: 40px;"> {{this.category}} </td>
@@ -40,8 +40,6 @@
                                 href="/admin/delete-product/{{this._id}}"> <button class="btn btn-danger"
                                     onclick="return confirm ('Are You Sure You Want To Delete {{this.name}} ') ">
                                     Delete</button></a> </td>
-
-
                     </tr>
 
                     {{/each}}
@@ -51,3 +49,17 @@
         </div>
     </div>
 </div>
+
+<style>
+    table {
+        counter-reset: 1;
+    }
+
+    table tr {
+        counter-increment: rowNumber;
+    }
+
+    table tr td:first-child::before {
+        content: counter(rowNumber);
+    }
+</style>

@@ -1,5 +1,5 @@
 * {
-    background-color: #000;
+    background-color: #373e98;
 }
 
 .login-container {
@@ -55,7 +55,7 @@
     left: 25px;
     top: 7px;
     padding: 0 5px;
-    background-color: #000;
+    
 }
 
 .input-section input {
@@ -89,4 +89,5 @@
     color: #fff;
     font-weight: bold;
 }
+
 

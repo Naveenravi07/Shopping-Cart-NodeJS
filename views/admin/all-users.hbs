@@ -1,0 +1,47 @@
+{{>admin-header}}
+
+<div class="container" style="padding-top: 80px;">
+    <div class="row">
+        <div class="col-xl-12 " style="overflow-x: auto;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Mobile</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">DB USER ID</th>
+                        <th scope="col">Image</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#if users}}
+                    {{#each users}}
+                    <tr>
+                        <td style="padding-left: 15px; padding-top: 40px;"></td>
+                        <td style="padding-left: 15px; padding-top: 40px;"> {{this.name}} </td>
+                        <td style="padding-left: 45px; padding-top: 40px;"> {{this.mobile}} </td>
+                        <td style="padding-left: 45px; padding-top: 40px;"> {{this.email}} </td>
+                        <td style="padding-left: 45px; padding-top: 40px;"> {{this._id}} </td>
+                        <td style="padding-left: 45px; padding-top: 40px;"> <img
+                                src="" alt="" style="height: 50px; width: 40px;">
+                        </td>
+
+
+                        <td style="padding-left: 15px; padding-top: 40px;"> <a href="">
+                                <button class="btn btn-primary">
+                                    Edit User</button> </a> </td>
+
+
+
+                        <td style="padding-left: 15px;padding-top: 40px; "> <a href="/admin/delete-user/{{this._id}}"> <button class="btn btn-danger">
+                                   Delete User</button></a> </td>
+                    </tr>
+
+                    {{/each}}
+                    {{/if}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
