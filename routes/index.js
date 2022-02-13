@@ -63,7 +63,7 @@ router.post('/login', (req, res) => {
 
 router.get('/signup', (req, res) => {
   if (req.session.loggedIn) {
-  res.redirect('/')
+    res.redirect('/')
   } else
     res.render('login/signup')
 })
@@ -101,9 +101,13 @@ router.get('/cart', verifyUserLogin, async (req, res) => {
   let cartItems = Helpers.cartChecker(req.session.user._id).then((response) => {
     if (response.state) {
       let userId = req.session.user._id
-      Helpers.getCartProducts(userId).then((products) => {
-        res.render('users/cart', { products })
+      let user = req.session.user
+      Helpers.getCartCount(userId).then((cartCount) => {
+        Helpers.getCartProducts(userId).then((products) => {
+          res.render('users/cart', { products, cartCount, user })
+        })
       })
+
     } else {
       console.log("no Item in cart");
       res.redirect('/')
@@ -111,11 +115,14 @@ router.get('/cart', verifyUserLogin, async (req, res) => {
   })
 })
 
+
 //Profile Router
 router.get('/profile', verifyUserLogin, async (req, res) => {
   let userId = req.session.user._id
-  let userDetails = Helpers.getProfileDetails(userId)
-  res.render('users/profile', { userDetails })
+  let user = Helpers.getProfileDetails(userId).then((user) => {
+    res.render('users/profile',{user})
+  })
+
 })
 
 
@@ -129,4 +136,24 @@ router.get('/removecartitem/:id', verifyUserLogin, async (req, res) => {
   })
 
 })
+//Change Product Quantity
+router.post('/change-product-quantity', async (req, res) => {
+  let Details = req.body
+  console.log(req.body);
+  await Helpers.changeProductQuantity(Details).then((response) => {
+    console.log(response);
+    res.json(response)
+  })
+})
+
+//Remove Product From Cart
+
+router.post('/remove-product-fromcart',async(req,res)=>{
+  console.log(req.body);
+ await userHelper.removeProductFromCart(req.body).then((response)=>{
+    console.log(response);
+    res.json(response)
+  })
+})
 module.exports = router;
+

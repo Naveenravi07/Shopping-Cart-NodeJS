@@ -3,6 +3,7 @@ var collection = require('../config/dbCollection')
 var bcrypt = require('bcrypt')
 var objectId = require('mongodb').ObjectId
 const { ObjectId } = require('mongodb')
+const { response } = require('express')
 
 
 module.exports = {
@@ -136,6 +137,12 @@ module.exports = {
             foreignField: '_id',
             as: 'product'
           }
+        },
+
+        {
+          $project: {
+            item: 1, quantity: 1, product: { $arrayElemAt: ['$product', 0] }
+          }
         }
       ]).toArray()
       resolve(cartItems)
@@ -195,7 +202,54 @@ module.exports = {
       }
       resolve(state)
     })
-  }
+  },
 
+  changeProductQuantity: (Details) => {
+    let { cart, product, count, quantity } = Details;
+
+    return new Promise(async (resolve, reject) => {
+      count = parseInt(count);
+      quantity = parseInt(quantity)
+      if (count == -1 && quantity == 1) {
+        await db.get().collection(collection.CART_COLLECTION).updateOne({ _id: objectId(cart) },
+          {
+            $pull: { products: { item: objectId(product) } }
+          }
+        ).then((response) => {
+          resolve({ removeProduct: true })
+        })
+
+      } else {
+        db.get()
+          .collection(collection.CART_COLLECTION)
+          .updateOne(
+            { _id: objectId(cart), 'products.item': objectId(product) },
+            {
+              $inc: { "products.$.quantity": parseInt(count) },
+            }
+          )
+          .then((response) => {
+            resolve(true);
+          });
+      }
+
+    })
+  },
+  removeProductFromCart: (details) => {
+    let { cartId, proId } = details;
+    cartId = parseInt(cartId);
+    proId = parseInt(proId);
+    return new Promise(async (resolve, reject) => {
+
+      await db.get().collection(collection.CART_COLLECTION).updateOne({ _id: objectId(details.cart) },
+        {
+          $pull: { products: { item: objectId(details.product) } }
+        }
+      ).then((response) => {
+        resolve(response)
+      })
+
+    })
+  }
 
 }

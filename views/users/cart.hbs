@@ -1,21 +1,78 @@
+<div class="card">
+    {{>user-header}}
+    <div class="row">
+        <div class="col-md-8 cart">
+            <div class="title">
+                <div class="row">
+                    <div class="col">
+                        <h4><b>Shopping Cart</b></h4>
+                    </div>
+                    {{#if cartCount}}
+                    <div class="col align-self-center text-right text-muted">{{cartCount}} Items Inside Your Cart </div>
+                    {{/if}}
+                </div>
+            </div>
 
-<body>
-  <div class=”Cart-Container”>
-    <div class=”Header”>
-      <h3 class=”Heading”>Shopping Cart</h3>
-      <h5 class=”Action”>Remove all</h5>
+            {{#if products}}
+            {{#each products}}
+
+            <div class="row border-top border-bottom" id="productDivCart">
+                <div class="row main align-items-center">
+                    <div class="col-2"><img class="img-fluid" src="/images/product-images/{{this.item}}.jpg"></div>
+
+                    <div class="col">
+
+                        <div class="row text-muted"> {{this.product.name}} </div>
+                        <div class="row">{{this.product.description}}</div>
+                    </div>
+
+                    <button class="col border" style="color: green; "
+                        onclick="changeQuantity('{{this._id}}','{{this.product._id}}',1)">+</button>
+
+
+                    {{!-- Display Current Of The Product Quantity Here --}}
+                    <h5 class="col border"> <strong id="CARTNO"> <span
+                                id="{{this.product._id}}">{{this.quantity}}</span> </strong> </h5>
+
+                    <button class="col border" style="color: green; "
+                        onclick="changeQuantity('{{this._id}}','{{this.product._id}}',-1)">-</button>
+
+                    <div class="col"> &#x20b9 {{this.product.price}} </div>
+                    <button class="btn btn-danger" onclick="removeProduct('{{this._id}}','{{this.product._id}}')">Delete </button>
+
+                </div>
+            </div>
+            {{/each}}
+            {{/if}}
+
+            <div class="back-to-shop"><a href="/">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
+        </div>
+        <div class="col-md-4 summary">
+            <div>
+                <h5><b>Summary</b></h5>
+            </div>
+            <hr>
+            <div class="row">
+                {{#if cartCount}}
+                <div class="col" style="padding-left:0;"> {{cartCount}} ITEMS </div>
+                <div class="col text-right">&#x20b9 132.00</div>
+                {{/if}}
+            </div>
+            <form>
+                <p>SHIPPING</p> <select>
+                    <option class="text-muted">COD-CASH ON DELIVERY</option>
+                    <option class="text-muted">RAZORPAY(includes upi,gpay,cards)</option>
+                </select>
+            </form>
+            <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                <div class="col">TOTAL PRICE</div>
+                <div class="col text-right"> &#x20b9 137.00</div>
+            </div> <button class="btn">CHECKOUT</button>
+        </div>
     </div>
-    <div class=”Cart-Items”>
-      <div class=”image-box”>
-        <img src="">
-      </div>
-      <div class=”about”>
-        <h1 class=”title”>Apple Juice</h1>
-        <h3 class=”subtitle”>250ml</h3>
-        <img src="" >
-      </div>
-      <div class=”counter”></div>
-      <div class=”prices”></div>
-    </div>
-  </div>
-</body>
+</div>
+
+<link rel="stylesheet" href="/stylesheets/cart.css">
+<script src="/javascripts/script.css"></script>
+
+
