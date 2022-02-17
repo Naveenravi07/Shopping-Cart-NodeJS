@@ -26,19 +26,20 @@
                         <div class="row">{{this.product.description}}</div>
                     </div>
 
-                    <button class="col border" style="color: green; "
-                        onclick="changeQuantity('{{this._id}}','{{this.product._id}}',1)">+</button>
+                    <button class="col border" style="color: rgb(12, 12, 12); font-size: 20px; font-weight: bold; "
+                        onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)">+</button>
 
 
                     {{!-- Display Current Of The Product Quantity Here --}}
-                    <h5 class="col border"> <strong id="CARTNO"> <span
+                    <h5 class="col border"> <strong id="CARTNO"> <span style="text-align: center;"
                                 id="{{this.product._id}}">{{this.quantity}}</span> </strong> </h5>
 
-                    <button class="col border" style="color: green; "
-                        onclick="changeQuantity('{{this._id}}','{{this.product._id}}',-1)">-</button>
+                    <button class="col border" style="color: rgb(8, 8, 8); font-weight: bold; font-size: 20px;  "
+                        onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)"> -</button>
 
                     <div class="col"> &#x20b9 {{this.product.price}} </div>
-                    <button class="btn btn-danger" onclick="removeProduct('{{this._id}}','{{this.product._id}}')">Delete </button>
+                    <button class="btn btn-danger" onclick="removeProduct('{{this._id}}','{{this.product._id}}')">Delete
+                    </button>
 
                 </div>
             </div>
@@ -54,25 +55,25 @@
             <hr>
             <div class="row">
                 {{#if cartCount}}
-                <div class="col" style="padding-left:0;"> {{cartCount}} ITEMS </div>
-                <div class="col text-right">&#x20b9 132.00</div>
-                {{/if}}
+                <div class="col" style="padding-left:0;"> {{cartCount}} ITEMS </div> {{/if}}
+                <div class="col text-right">&#x20b9 <span id="hfgf"> {{total}}</span></div>
+               
             </div>
-            <form>
-                <p>SHIPPING</p> <select>
-                    <option class="text-muted">COD-CASH ON DELIVERY</option>
-                    <option class="text-muted">RAZORPAY(includes upi,gpay,cards)</option>
-                </select>
-            </form>
-            <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+
+            <div class="row" style="border-top: 1px solid rgba(12, 12, 12, 0.1); padding: 2vh 0;">
                 <div class="col">TOTAL PRICE</div>
-                <div class="col text-right"> &#x20b9 137.00</div>
-            </div> <button class="btn">CHECKOUT</button>
+                <div class="col text-right"> &#x20b9 <span id="carttotalamount">
+                    {{#if total}}
+                        {{total}}
+                        {{else}}
+                        0
+                        {{/if}}
+                    </span> </div>
+            </div> <a href="/place-order" class="btn">CHECKOUT</a>
         </div>
     </div>
 </div>
 
 <link rel="stylesheet" href="/stylesheets/cart.css">
-<script src="/javascripts/script.css"></script>
-
+<script src="/javascripts/script.js"></script>
 

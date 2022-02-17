@@ -19,7 +19,9 @@ router.get('/add-products', (req, res) => {
 
 
 router.post('/add-products', (req, res) => {
-    productHelpers.addProduct(req.body).then((data) => {
+    let datainsert = req.body
+    datainsert.price = parseInt(datainsert.price)
+    productHelpers.addProduct(datainsert).then((data) => {
         let id = data.insertedId
         let image = req.files.image
         image.mv('./public/images/product-images/' + id + '.jpg', (err) => {

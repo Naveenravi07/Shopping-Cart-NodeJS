@@ -1,3 +1,5 @@
+
+
 function addToCart(proId) {
     $.ajax({
 
@@ -16,7 +18,7 @@ function addToCart(proId) {
 }
 
 
-function changeQuantity(cartId, proId, count) {
+function changeQuantity(cartId, proId, userId, count) {
     console.log(proId)
     let spanId = proId
     console.log(spanId)
@@ -30,6 +32,7 @@ function changeQuantity(cartId, proId, count) {
             product: proId,
             count: newcount,
             quantity: quantity,
+            user: userId,
         },
         method: 'post',
         success: (response) => {
@@ -37,24 +40,39 @@ function changeQuantity(cartId, proId, count) {
                 location.reload()
             } else {
                 document.getElementById(spanId).innerHTML = quantity + newcount
+                console.log(response);
+                document.getElementById("carttotalamount").innerHTML = response.total
+                document.getElementById("hfgf").innerHTML = response.total
             }
         }
     })
 }
 
 function removeProduct(cartId, proId) {
-   
+
     $.ajax({
-        url:'/remove-product-fromcart',
-        data:{
-            cart:cartId,
-            product:proId,
+        url: '/remove-product-fromcart',
+        data: {
+            cart: cartId,
+            product: proId,
         },
-        method:'post',
-        success:(response)=>{
-            if(response){
+        method: 'post',
+        success: (response) => {
+            if (response) {
                 location.reload()
             }
         }
     })
 }
+//  Place Order
+$("#placeOrderForm").submit((e) => {
+    e.preventDefault()
+    $.ajax({
+        url: '/place-order',
+        method: 'post',
+        data: $('#placeOrderForm').serialize(),
+        success: (response) => {
+            alert(response)
+        }
+    })
+})

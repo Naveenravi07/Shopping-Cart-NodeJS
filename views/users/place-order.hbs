@@ -1,0 +1,67 @@
+{{>user-header}}
+<div class="container-login100">
+    <div class="wrap-login100">
+        <div class="login100-pic js-tilt" data-tilt>
+            <img src="/images/checkout.png" alt="IMG">
+        </div>
+
+        <form class="login100-form validate-form" id="placeOrderForm" action="/place-order" method="post">
+            <span class="login100-form-title">
+                Checkout
+            </span>
+
+            <div class="wrap-input100 validate-input" data-validate="Valid Adress is required">
+                <input class="input100" type="text" name="adress" placeholder="Adress">
+                <span class="focus-input100"></span>
+                <span class="symbol-input100">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                </span>
+            </div>
+            <div class="wrap-input100 validate-input" data-validate="Valid Pincode is required">
+                <input class="input100" type="tel" name="pincode" placeholder="Pincode">
+                <span class="focus-input100"></span>
+                <span class="symbol-input100">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                </span>
+            </div>
+
+            <div class="wrap-input100 validate-input" data-validate="Valid mobile is required ">
+                <input class="input100" type="text" name="mobile" placeholder="Mobile">
+                <span class="focus-input100"></span>
+                <span class="symbol-input100">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                </span>
+            </div>
+            <h5 class="login100-form-title" style="margin-top: 50px;"> Total Amount: <span id="placeordertotalamount"> {{total}}</span></h5>
+            <br>
+            <h5 class="login100-form-title" style="padding-top: -80px; margin-top: -50px;">Payment Type</h5>
+
+
+            <label class="radio-inline" style="text-align: center; margin-left: 25px; margin-top: -15px;">
+                <input style="text-align: center; align-items: center;" class=""
+                    type="radio" name="payment-method" value="COD" checked> CASH ON DELIVERY
+            </label>
+
+            <label class="radio-inline">
+                <input class="" type="radio" name="payment-method" value="ONLINE" checked>
+                ONLINE PAYMENT
+            </label>
+
+            <label style="visibility: hidden">
+            <input type="text" style="visibility: hidden;" name="userId" value="{{user._id}}"></label>
+            <div class="container-login100-form-btn">
+                <button class="login100-form-btn">
+                    Checkout
+                </button>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+</div>
+<script>
+    
+</script>
+
+<link rel="stylesheet" href="/stylesheets/place-order.css">
