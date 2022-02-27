@@ -64,15 +64,3 @@ function removeProduct(cartId, proId) {
         }
     })
 }
-//  Place Order
-$("#placeOrderForm").submit((e) => {
-    e.preventDefault()
-    $.ajax({
-        url: '/place-order',
-        method: 'post',
-        data: $('#placeOrderForm').serialize(),
-        success: (response) => {
-            alert(response)
-        }
-    })
-})

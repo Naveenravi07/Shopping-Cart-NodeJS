@@ -1,0 +1,80 @@
+<link rel="stylesheet" href="/stylesheets/view-order.css">
+{{>user-header}}
+
+<div class="order-container">
+    {{#if orders}}
+    {{#each orders}}
+
+
+    <div class="my-orders" id="{{this._id}}">
+        <div class="image-container" id="{{this.products._id}}">
+            <img id="{{this.products.item}}" src="/images/product-images/{{this.product._id}}.jpg" />
+
+        </div>
+        <div class="order-details">
+            <h1>
+                Order Details
+            </h1>
+            <p>
+                Order ID:{{this._id}}
+
+            </p>
+            <p>
+                Name: {{this.product.name}}
+            </p>
+            <p>
+                Payment: {{this.paymentType}}
+            </p>
+            <p>
+                Status: {{this.status}}
+            </p>
+            <p>
+                Quantity:
+                {{this.quantity}}
+            </p>
+            <p>
+                Rs.
+                {{this.product.price}}
+            </p>
+            <p>
+                Total:
+                {{this.totalAmount}}
+            </p>
+            <a href="/view-order-product/{{this._id}}" class="btn btn-primary">View Order Details</a>
+        </div>
+
+        <div class="delivery-details">
+            <h1>
+                Delivery Details
+            </h1>
+            <p>
+                Purshased Date:
+                {{this.date}}
+            </p>
+            <p>
+                Adresss:
+                {{this.deliveryDetails.adress}}
+            </p>
+            <p>
+                Pin Code:
+                {{this.deliveryDetails.pincode}}
+            </p>
+            <p>
+                Mobile No:
+                {{this.deliveryDetails.mobile}}
+            </p>
+
+
+        </div>
+    </div>
+{{/each}}
+
+</div>
+
+{{else}}
+<div class="empty">
+    <h1>
+        You Have No Orders Placed
+    </h1>
+</div>
+{{/if}}

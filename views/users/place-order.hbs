@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/stylesheets/place-order.css">
 {{>user-header}}
 <div class="container-login100">
     <div class="wrap-login100">
@@ -5,7 +6,7 @@
             <img src="/images/checkout.png" alt="IMG">
         </div>
 
-        <form class="login100-form validate-form" id="placeOrderForm" action="/place-order" method="post">
+        <form class="login100-form validate-form" id="check-out-form" action="">
             <span class="login100-form-title">
                 Checkout
             </span>
@@ -32,25 +33,26 @@
                     <i class="fa fa-envelope" aria-hidden="true"></i>
                 </span>
             </div>
-            <h5 class="login100-form-title" style="margin-top: 50px;"> Total Amount: <span id="placeordertotalamount"> {{total}}</span></h5>
+            <h5 class="login100-form-title" style="margin-top: 50px;"> Total Amount: <span id="placeordertotalamount">
+                    {{total}}</span></h5>
             <br>
             <h5 class="login100-form-title" style="padding-top: -80px; margin-top: -50px;">Payment Type</h5>
 
 
             <label class="radio-inline" style="text-align: center; margin-left: 25px; margin-top: -15px;">
-                <input style="text-align: center; align-items: center;" class=""
-                    type="radio" name="payment-method" value="COD" checked> CASH ON DELIVERY
+                <input style="text-align: center; align-items: center;" class="" type="radio" name="paymentmethod"
+                    value="COD" checked> CASH ON DELIVERY
             </label>
 
-            <label class="radio-inline">
-                <input class="" type="radio" name="payment-method" value="ONLINE" checked>
+            <label class="radio-inline" style="text-align: center; margin-left: 25px; margin-top: -15px;">
+                <input class="" type="radio" name="paymentmethod" value="ONLINE" checked>
                 ONLINE PAYMENT
             </label>
 
             <label style="visibility: hidden">
-            <input type="text" style="visibility: hidden;" name="userId" value="{{user._id}}"></label>
+                <input type="text" style="visibility: hidden;" name="userId" value="{{user._id}}"></label>
             <div class="container-login100-form-btn">
-                <button class="login100-form-btn">
+                <button class="login100-form-btn" type="submit">
                     Checkout
                 </button>
             </div>
@@ -60,8 +62,87 @@
     </div>
 </div>
 </div>
-<script>
-    
-</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<link rel="stylesheet" href="/stylesheets/place-order.css">
+
+<script>
+    $("#check-out-form").submit((e) => {
+        e.preventDefault()
+        $.ajax({
+            url: '/place-order',
+            method: 'post',
+            data: $('#check-out-form').serialize(),
+            success: (response) => {
+                if (response.status == "COD") {
+                    alert("Order Success You Are Beigng Redirected To Order History")
+                    location.href = '/orders'
+                } else {
+                    razorPayPayment(response)
+                }
+
+            }
+        })
+    })
+
+    function razorPayPayment(order) {
+
+        console.log(order)
+        var options = {
+            "key": "rzp_test_akmj6jXgZK1rki", // Enter the Key ID generated from the Dashboard
+            "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "ShastriCart",
+            "description": "Shastri Cart Prvt Ltd",
+            "image": "https://autopilothq.com/uploads/2017/03/20170329-shopping-1-large.png",
+            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response) {
+                verifyPayment(response, order)
+            },
+            "prefill": {
+                "name": "",
+                "email": "",
+                "contact": ""
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#ff2929"
+            },
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+        rzp1.on('payment.failed', function (response) {
+            alert(response.error.code);
+            alert(response.error.description);
+            alert(response.error.source);
+            alert(response.error.step);
+            alert(response.error.reason);
+            alert(response.error.metadata.order_id);
+            alert(response.error.metadata.payment_id);
+        });
+    }
+
+    function verifyPayment(response, order) {
+        $.ajax({
+            url: '/verify-payment',
+            data: {
+                order,
+                response
+            },
+            method: 'post',
+            success: (response) => {
+                console.log(response)
+                if (response.success) {
+                    alert("Order Placed Successfully")
+                    location.href = '/orders'
+                } else {
+                    alert("Order Failed")
+                }
+
+            }
+        })
+    }
+
+
+</script>

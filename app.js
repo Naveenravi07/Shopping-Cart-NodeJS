@@ -6,6 +6,7 @@ var logger = require('morgan');
 const { engine: hbs } = require("express-handlebars");
 const db = require('./config/dbConnect')
 const session = require('express-session')
+var MongoStore = require('connect-mongodb-session')(session);
 const fileUpload=require('express-fileupload')
 
 //Db Connection
@@ -28,7 +29,17 @@ app.engine('hbs', hbs({ extname: 'hbs', defaultLayout: 'layout', layoutsDir: __d
 
 //Sessioning
 
-app.use(session({ secret: "key", cookie: { maxAge: 180 * 60 * 1000 } }));
+app.use(session(
+  {
+    secret: 'Key',
+    store: new MongoStore({url: 'mongodb://localhost:27017/ShastriCart', touchAfter: 24 * 3600}),
+    cookie: {maxAge: 180 * 60 * 1000},
+    saveUninitialized: true,
+    resave: true,
+  }));
+
+
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

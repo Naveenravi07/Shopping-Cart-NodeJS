@@ -23,7 +23,7 @@ router.get('/', async function (req, res, next) {
     let cartCount = await Helpers.getCartCount(req.session.user._id)
     let products = await productHelpers.getAllProducts()
     let user = req.session.user
-    res.render('index', { user, products, cartCount });
+    res.render('index', { user, products, cartCount, });
 
   } else {
     let products = await productHelpers.getAllProducts()
@@ -174,23 +174,64 @@ router.post('/remove-product-fromcart', async (req, res) => {
 router.get('/place-order', verifyUserLogin, async (req, res) => {
   let userId = req.session.user._id
   let user = req.session.user
-  let total = await userHelper.getTotalAmount(userId).then((total) => {
-    console.log(total);
-    res.render('users/place-order', { total, user })
-
-  })
+  console.log("haiii");
+  let total = await userHelper.getTotalAmount(userId)
+  res.render('users/place-order', { total, user })
 })
+
+
 
 router.post('/place-order', async (req, res) => {
   let products = await userHelper.getCartProductList(req.body.userId)
   let totalAmount = await userHelper.getTotalAmount(req.body.userId)
-  await userHelper.placeOrder(req.body, products, totalAmount).then((response) => {
-    res.json({ status: true })
+  await userHelper.placeOrder(req.body, products, totalAmount).then((orderId) => {
+    console.log(req.body);
+    if (req.body.paymentmethod === "COD") {
+      res.json({ status: "COD" })
+    } else {
+      userHelper.generateRazorpay(orderId, totalAmount).then((response) => {
+        console.log(response);
+        res.json(response)
+      })
+    }
   })
 })
 
-router.get('/orders',verifyUserLogin,(req,res)=>{
-  res.render('users/orders')
+router.get('/orders', verifyUserLogin, async (req, res) => {
+  let cartCount = await Helpers.getCartCount(req.session.user._id)
+  await userHelper.getOrderdProducts(req.session.user._id).then((orders) => {
+    let user = req.session.user
+    console.log(orders);
+    console.log(orders.deliveryDetails);
+    res.render('users/orders', { orders, user, cartCount })
+  })
+
+})
+
+router.get('/view-order-product/:id', (req, res) => {
+  let id = req.params.id
+  console.log(id);
+  userHelper.viewOrderdProducts(id).then((orders) => {
+    console.log(orders);
+    res.render('users/view-order-products', { orders, user: req.session.user })
+  })
+})
+
+router.post('/verify-payment', async (req, res) => {
+  console.log(req.body);
+  await userHelper.verifyPayment(req.body).then(() => {
+    userHelper.changePaymentStatus(req.body['order[receipt]']).then(() => {
+      res.json({ success: true })
+    })
+  })
+})
+router.post('/manage-dismiss',(req,res)=>{
+  console.log("bjnbkjclkjxc");
+  console.log(req.body);
+})
+
+router.get('/test', (req, res) => {
+  res.render('users/test')
 })
 module.exports = router;
 
