@@ -4,13 +4,50 @@ var db = require('../config/dbConnect')
 var Helpers = require('../Helpers/userHelper')
 var fs = require('fs')
 var productHelpers = require('../Helpers/product-Helpers');
+const userHelper = require('../Helpers/userHelper');
+
 
 
 router.get('/', async function (req, res, next) {
-    let products = await productHelpers.getAllProducts().then((items) => {
-        res.render('admin/admin', { items })
-    })
+    if (req.session.adminLoginStatus) {
+        let products = await productHelpers.getAllProducts().then((items) => {
+            let admin = req.session.admin
+            res.render('admin/admin', { items, admin })
+        })
+    } else {
+        res.redirect('/admin/login')
+    }
 });
+
+router.get('/login', async (req, res) => {
+
+    console.log(req.session.adminLoginStatus);
+    if (req.session.adminLoginStatus) {
+        res.redirect('/admin')
+    } else
+        res.render('login/admin-login')
+})
+
+router.post('/login', async (req, res) => {
+    console.log(req.body);
+    await userHelper.verifyAdminLogin(req.body).then((status) => {
+        console.log(status);
+        if (status.login) {
+            req.session.adminLoginStatus = true
+            req.session.admin = status.adminName
+            res.redirect('/admin')
+        } else {
+            req.session.adminLoginStatus = false
+            res.redirect('/admin/login')
+
+        }
+    })
+})
+
+router.get('/logout', (req, res) => {
+    req.session.destroy()
+    res.redirect('/')
+})
 
 //Add Products To DB
 router.get('/add-products', (req, res) => {
@@ -90,5 +127,12 @@ router.get('/delete-user/:id', async (req, res) => {
     await Helpers.deleteUser(userid).then((response) => {
         res.redirect('/admin/manage-users')
     })
+})
+
+router.get('/all-orders', async (req, res) => {
+    let orders = await Helpers.showAllOrdersWithDetailsForAdmin()
+    console.log(orders);
+    res.render('admin/all-orders', { orders })
+
 })
 module.exports = router;
