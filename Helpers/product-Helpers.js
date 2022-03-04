@@ -4,6 +4,7 @@ var db = require('../config/dbConnect')
 var Helpers = require('../Helpers/userHelper')
 var fs = require('fs')
 var collection = require('../config/dbCollection');
+const { resolve } = require('path');
 var objectId = require('mongodb').ObjectId
 
 module.exports = {
@@ -41,9 +42,9 @@ module.exports = {
         })
     },
 
-    updateProduct: async(proId, proDetails) => {
+    updateProduct: async (proId, proDetails) => {
         return new Promise(async (resolve, reject) => {
-         await   db.get().collection(collection.PRODUCTS_COLLECTION).updateOne({ _id: objectId(proId) }, {
+            await db.get().collection(collection.PRODUCTS_COLLECTION).updateOne({ _id: objectId(proId) }, {
                 $set: {
                     name: proDetails.name,
                     brand: proDetails.brand,
@@ -51,9 +52,20 @@ module.exports = {
                     price: proDetails.price,
                     category: proDetails.category
                 }
-            }).then((response)=>{
+            }).then((response) => {
                 resolve(response)
             })
+        })
+    },
+
+    shipItem: async (proId, orderId) => {
+        return new Promise(async (resolve, reject) => {
+            let response = await db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: objectId(orderId) }, {
+                $set: {
+                    status: "Shipped"
+                }
+            })
+            resolve(response)
         })
     }
 }

@@ -6,10 +6,13 @@ const { ObjectId } = require('mongodb')
 const { response } = require('express')
 const Razorpay = require('razorpay')
 const crypto = require('crypto')
-const { rejects } = require('assert')
+require('dotenv').config()
+
+
+
 var instance = new Razorpay({
-  key_id: 'rzp_test_akmj6jXgZK1rki',
-  key_secret: 'e2Dcs6yN4XMbseK6Oa8iuPHU',
+  key_id: process.env.RAZORPAY_KEY,
+  key_secret: process.env.RAZORPAY_SECRET,
 });
 module.exports = {
 
@@ -153,6 +156,7 @@ module.exports = {
       resolve(cartItems)
     })
   },
+
 
   getCartCount: (userId) => {
     return new Promise(async (resolve, reject) => {
@@ -311,7 +315,7 @@ module.exports = {
 
   placeOrder: async (details, products, total) => {
     return new Promise(async (resolve, reject) => {
-      let status = details['payment-method'] === 'COD' ? 'placed' : 'pending'
+      let status = details.paymentmethod === 'COD' ? 'placed' : 'pending'
       console.log(status);
       let orderObj = {
         deliveryDetails: {
@@ -395,7 +399,7 @@ module.exports = {
             paymentType: '$paymentMethod',
             totalAmount: '$totalAmount',
             status: '$status',
-            deliveryDetails: '$deliveryDetails'
+            deliveryDetails: '$deliveryDetails',
           }
         },
         {
@@ -414,6 +418,7 @@ module.exports = {
         }
       ]).toArray()
       resolve(orders)
+      console.log(orders);
     })
   },
 
@@ -433,14 +438,13 @@ module.exports = {
           console.log(order);
         }
       })
-
     })
   },
 
   verifyPayment: (details) => {
     return new Promise(async (resolve, reject) => {
 
-      let hmac = crypto.createHmac('sha256', 'e2Dcs6yN4XMbseK6Oa8iuPHU');
+      let hmac = crypto.createHmac('sha256', process.env.RAZORPAY_SECRET);
 
       hmac.update(details['response[razorpay_order_id]'] + '|' + details['response[razorpay_payment_id]'])
       hmac = hmac.digest('hex')
@@ -468,5 +472,87 @@ module.exports = {
       })
       resolve()
     })
-  }
+  },
+  modalCloseCase: (orderId) => {
+    return new Promise(async (resolve, reject) => {
+      await db.get().collection(collection.ORDER_COLLECTION).deleteOne({ _id: objectId(orderId) },)
+      resolve({ state: true })
+    })
+  },
+
+  verifyAdminLogin: async (loginData) => {
+    let state = {}
+    return new Promise(async (resolve, reject) => {
+      if (loginData.email == "gamerkidnav@gmail.com" && loginData.password == "123") {
+        state.login = true
+        state.adminName = "Naveen Admin"
+      } else {
+        state.login = false
+      }
+      resolve(state)
+    })
+  },
+
+  showAllOrdersForAdmin: () => {
+    return new Promise(async (resolve, reject) => {
+      let orders = await db.get().collection(collection.ORDER_COLLECTION).find().toArray()
+      resolve(orders)
+    })
+  },
+
+  showAllOrdersWithDetailsForAdmin: () => {
+    return new Promise(async (resolve, reject) => {
+      let orders = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+        {
+          $match: {}
+        },
+        {
+          $unwind: "$products"
+        },
+        {
+          $project: {
+            orderId: "$_id",
+            pruchaseDate: "$date",
+            userId: "$user",
+            Adress: "$deliveryDetails.adress",
+            pincode: "$deliveryDetails.pincode",
+            mobileNumber: "$deliveryDetails.mobile",
+            paymentMethod: "$paymentMethod",
+            products: "$products.item",
+            quantity: "$products.quantity",
+            orderTotal: "$totalAmount",
+            status: "$status"
+          }
+        },
+
+        {
+          $lookup: {
+            from: collection.PRODUCTS_COLLECTION,
+            localField: 'products',
+            foreignField: '_id',
+            as: 'product'
+          }
+        },
+        {
+          $lookup: {
+            from: collection.USER_COLLECTION,
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'user'
+          }
+        },
+        {
+          $unwind: "$product"
+        },
+        {
+          $unwind: "$user"
+        },
+
+
+      ]).toArray()
+      resolve(orders)
+    })
+  },
+
+
 }

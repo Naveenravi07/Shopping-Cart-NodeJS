@@ -109,6 +109,13 @@
             "theme": {
                 "color": "#ff2929"
             },
+
+            "modal": {
+                "ondismiss": function () {
+                    console.log('Checkout form closed');
+                    manageDismiss(order.receipt)
+                }
+            }
         };
         var rzp1 = new Razorpay(options);
         rzp1.open();
@@ -144,5 +151,20 @@
         })
     }
 
+    function manageDismiss(orderId) {
+        $.ajax({
+            url: '/manage-dismiss',
+            data: {
+                orderId
+            },
+            method: 'post',
+            success: (response) => {
+                if (response.state) {
+                    alert("Payment Failed")
+                    location.href = '/orders'
+                }
+            }
+        })
+    }
 
 </script>

@@ -175,8 +175,15 @@ router.get('/place-order', verifyUserLogin, async (req, res) => {
   let userId = req.session.user._id
   let user = req.session.user
   console.log("haiii");
-  let total = await userHelper.getTotalAmount(userId)
-  res.render('users/place-order', { total, user })
+  let cartCount = await userHelper.getCartCount(userId)
+  console.log(cartCount);
+  if (cartCount > 0) {
+    let total = await userHelper.getTotalAmount(userId)
+    res.render('users/place-order', { total, user, cartCount })
+  } else {
+    res.redirect('/')
+  }
+
 })
 
 
@@ -195,6 +202,8 @@ router.post('/place-order', async (req, res) => {
       })
     }
   })
+
+
 })
 
 router.get('/orders', verifyUserLogin, async (req, res) => {
@@ -203,7 +212,7 @@ router.get('/orders', verifyUserLogin, async (req, res) => {
     let user = req.session.user
     console.log(orders);
     console.log(orders.deliveryDetails);
-    res.render('users/orders', { orders, user, cartCount })
+    res.render('users/orders', { orders, user, cartCount, })
   })
 
 })
@@ -225,13 +234,15 @@ router.post('/verify-payment', async (req, res) => {
     })
   })
 })
-router.post('/manage-dismiss',(req,res)=>{
-  console.log("bjnbkjclkjxc");
-  console.log(req.body);
+router.post('/manage-dismiss', async (req, res) => {
+  console.log(req.body.orderId);
+  
+  await userHelper.modalCloseCase(req.body.orderId).then((response) => {
+    res.json(response)
+  })
 })
 
 router.get('/test', (req, res) => {
   res.render('users/test')
 })
 module.exports = router;
-
