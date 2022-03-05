@@ -6,12 +6,13 @@ const { ObjectId } = require('mongodb')
 const { response } = require('express')
 const Razorpay = require('razorpay')
 const crypto = require('crypto')
-const { rejects } = require('assert')
-const { stat } = require('fs')
-const { resolve } = require('path')
+require('dotenv').config()
+
+
+
 var instance = new Razorpay({
-  key_id: 'rzp_test_akmj6jXgZK1rki',
-  key_secret: 'e2Dcs6yN4XMbseK6Oa8iuPHU',
+  key_id: process.env.RAZORPAY_KEY,
+  key_secret: process.env.RAZORPAY_SECRET,
 });
 module.exports = {
 
@@ -398,7 +399,7 @@ module.exports = {
             paymentType: '$paymentMethod',
             totalAmount: '$totalAmount',
             status: '$status',
-            deliveryDetails: '$deliveryDetails'
+            deliveryDetails: '$deliveryDetails',
           }
         },
         {
@@ -417,6 +418,7 @@ module.exports = {
         }
       ]).toArray()
       resolve(orders)
+      console.log(orders);
     })
   },
 
@@ -442,7 +444,7 @@ module.exports = {
   verifyPayment: (details) => {
     return new Promise(async (resolve, reject) => {
 
-      let hmac = crypto.createHmac('sha256', 'e2Dcs6yN4XMbseK6Oa8iuPHU');
+      let hmac = crypto.createHmac('sha256', process.env.RAZORPAY_SECRET);
 
       hmac.update(details['response[razorpay_order_id]'] + '|' + details['response[razorpay_payment_id]'])
       hmac = hmac.digest('hex')

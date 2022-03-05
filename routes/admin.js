@@ -5,6 +5,7 @@ var Helpers = require('../Helpers/userHelper')
 var fs = require('fs')
 var productHelpers = require('../Helpers/product-Helpers');
 const userHelper = require('../Helpers/userHelper');
+const { response } = require('express');
 
 
 
@@ -57,6 +58,7 @@ router.get('/add-products', (req, res) => {
 
 router.post('/add-products', (req, res) => {
     let datainsert = req.body
+    datainsert.status = 'Preparing for shipping'
     datainsert.price = parseInt(datainsert.price)
     productHelpers.addProduct(datainsert).then((data) => {
         let id = data.insertedId
@@ -133,6 +135,14 @@ router.get('/all-orders', async (req, res) => {
     let orders = await Helpers.showAllOrdersWithDetailsForAdmin()
     console.log(orders);
     res.render('admin/all-orders', { orders })
+})
 
+router.post('/shipItem', async (req, res) => {
+    console.log(req.body)
+    let proId = req.body.proId
+    let orderId = req.body.orderId
+    let response = await productHelpers.shipItem(proId, orderId)
+    console.log(response);
+    res.json(response)
 })
 module.exports = router;
