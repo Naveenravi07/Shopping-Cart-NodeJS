@@ -5,15 +5,14 @@ var Helpers = require('../Helpers/userHelper')
 var fs = require('fs')
 var productHelpers = require('../Helpers/product-Helpers');
 const userHelper = require('../Helpers/userHelper');
-const { response } = require('express');
-
+const {response} = require('express');
 
 
 router.get('/', async function (req, res, next) {
     if (req.session.adminLoginStatus) {
         let products = await productHelpers.getAllProducts().then((items) => {
             let admin = req.session.admin
-            res.render('admin/admin', { items, admin })
+            res.render('admin/admin', {items, admin})
         })
     } else {
         res.redirect('/admin/login')
@@ -25,8 +24,9 @@ router.get('/login', async (req, res) => {
     console.log(req.session.adminLoginStatus);
     if (req.session.adminLoginStatus) {
         res.redirect('/admin')
-    } else
+    } else 
         res.render('login/admin-login')
+    
 })
 
 router.post('/login', async (req, res) => {
@@ -50,7 +50,7 @@ router.get('/logout', (req, res) => {
     res.redirect('/')
 })
 
-//Add Products To DB
+// Add Products To DB
 router.get('/add-products', (req, res) => {
     res.render('admin/add-products')
 })
@@ -73,12 +73,12 @@ router.post('/add-products', (req, res) => {
     })
 })
 
-//Edit Product Router
+// Edit Product Router
 
 router.get('/edit-product/:id', (req, res) => {
     let proId = req.params.id
     productHelpers.getProductDetails(proId).then((product) => {
-        res.render('admin/edit-product', { product })
+        res.render('admin/edit-product', {product})
     })
 
 })
@@ -89,7 +89,9 @@ router.post('/edit-product/:id', (req, res) => {
         if (req.files) {
             let image = req.files.image
             fs.unlink("./public/images/product-images/" + proId + ".jpg", (error) => {
-                if (error) throw error
+                if (error) 
+                    throw error
+                
                 console.log("error" + error);
             })
             image.mv('./public/images/product-images/' + proId + ".jpg", (err) => {
@@ -105,7 +107,7 @@ router.post('/edit-product/:id', (req, res) => {
     })
 })
 
-//Delete Product Router
+// Delete Product Router
 
 router.get('/delete-product/:id', (req, res) => {
     let proId = req.params.id
@@ -113,14 +115,16 @@ router.get('/delete-product/:id', (req, res) => {
         res.redirect('/admin')
     })
     fs.unlink("./public/images/product-images/" + proId + ".jpg", (error) => {
-        if (error) throw error
+        if (error) 
+            throw error
+        
     })
 
 })
 
 router.get('/manage-users', async (req, res) => {
     let user = await Helpers.getAllUsers().then((users) => {
-        res.render('admin/all-users', { users })
+        res.render('admin/all-users', {users})
     })
 })
 
@@ -134,7 +138,7 @@ router.get('/delete-user/:id', async (req, res) => {
 router.get('/all-orders', async (req, res) => {
     let orders = await Helpers.showAllOrdersWithDetailsForAdmin()
     console.log(orders);
-    res.render('admin/all-orders', { orders })
+    res.render('admin/all-orders', {orders})
 })
 
 router.post('/shipItem', async (req, res) => {
@@ -146,3 +150,4 @@ router.post('/shipItem', async (req, res) => {
     res.json(response)
 })
 module.exports = router;
+
