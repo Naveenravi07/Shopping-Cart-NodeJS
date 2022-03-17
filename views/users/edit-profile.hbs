@@ -1,0 +1,96 @@
+<link rel="stylesheet" href="/stylesheets/profile.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/2.0.0-alpha.2/cropper.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/2.0.0-alpha.2/cropper.min.js"></script>
+{{>user-header}}
+<div class="row py-5 px-4">
+    <div class="col-md-5 mx-auto">
+        <!-- Profile widget -->
+        <div class="bg-white shadow rounded overflow-hidden">
+            <div class="px-4 pt-0 pb-4 cover">
+                <div class="media align-items-end profile-head">
+                    <form action="/edit-profile" method="post" enctype="multipart/form-data">
+                        {{!-- Profile Icon --}}
+
+                        <div class="profile-img-container img-circle">
+                            {{#if user.photo}}
+                            <img src="/images/profile-pics/{{user._id}}.jpg" width="130"
+                                class="img-thumbnail img-circle img-responsive" alt="">
+                            <input type="file" name="image" />
+                            <br>
+                            <p>Change Photo</p>
+                            {{else}}
+
+
+                            <img src="https://i.pinimg.com/736x/89/90/48/899048ab0cc455154006fdb9676964b3.jpg" alt="..."
+                                width="130" class="img-thumbnail img-circle img-responsive">
+                            <input type="file" name="image" />
+
+                            <p> Add Profile Photo</p>
+
+                            {{/if}}
+                            <div class="icon-wrapper">
+                                <i class="fa fa-upload fa-5x"></i>
+                            </div>
+                        </div>
+
+                        {{!-- --}}
+                        <div class="profile mr-3">
+                        </div>
+                        <div class="media-body mb-5 text-white">
+                            <h4 style="font-family: Poppins-Bold; visibility: hidden;" class="mt-0 mb-0">{{user.name}}
+                            </h4>
+
+                        </div>
+                </div>
+            </div>
+            <div class="bg-light p-4 d-flex justify-content-end text-center">
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item">
+                        <h5 class="font-weight-bold mb-0 d-block">215</h5><small class="text-muted"> <i
+                                class="fas fa-image mr-1"></i>Photos</small>
+                    </li>
+                    <li class="list-inline-item">
+                        <h5 class="font-weight-bold mb-0 d-block">745</h5><small class="text-muted"> <i
+                                class="fas fa-user mr-1"></i>Followers</small>
+                    </li>
+                    <li class="list-inline-item">
+                        <h5 class="font-weight-bold mb-0 d-block">340</h5><small class="text-muted"> <i
+                                class="fas fa-user mr-1"></i>Following</small>
+                    </li>
+                </ul>
+            </div>
+            <div class="px-4 py-3">
+                <h2 style="font-family: Poppins-Bold; margin-top: 50px;"> Profile</h2>
+
+
+
+                <div class="p-4 rounded shadow-sm bg-light">
+                    <p class="font-italic mb-0">Name &nbsp: &nbsp<input type="text" value="{{user.name}}" name="name"
+                            id="">
+                    </p>
+                    <p class="mb-0">Email &nbsp:&nbsp <input type="text" value="{{user.email}}" name="email"></p>
+                    <p style="visibility: hidden;" class="mb-0">UserId &nbsp:&nbsp <input type="text"
+                            style="visibility: hidden;" value="{{user._id}}" name="id"></p>
+                    <p class="font-italic mb-0">Mobile: <input type="number" value=" {{user.mobile}}" name="mobile">
+                    </p>
+                    <p class="font-italic mb-0">Password <input type="password" required name="updatedpassword"></p>
+
+
+                    <p style="visibility: hidden;" class="font-italic mb-0">photo <input value="{{user.photostatus}}" 
+                            name="photostatus"></p>
+
+                </div>
+                <div class="container-login100-form-btn">
+                    <button class="login100-form-btn" type="submit">
+                        Update
+                    </button>
+                </div>
+                </form>
+            </div>
+            <button>
+                <a href="/" class="btn btn-outline-dark btn-sm btn-block">Go To Home</a>
+            </button>
+        </div>
+    </div>
+</div>
+
