@@ -149,5 +149,9 @@ router.post('/shipItem', async (req, res) => {
     console.log(response);
     res.json(response)
 })
+
+router.get('/test',(req,res)=>{
+    res.render('admin/dashboard')
+})
 module.exports = router;
 

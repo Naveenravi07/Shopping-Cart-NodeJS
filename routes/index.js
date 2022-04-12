@@ -291,7 +291,5 @@ router.post('/manage-dismiss', async (req, res) => {
     })
 })
 
-router.get('/test', (req, res) => {
-    res.render('users/test')
-})
+
 module.exports = router;
