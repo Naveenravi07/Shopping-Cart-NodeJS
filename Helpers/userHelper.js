@@ -23,6 +23,7 @@ module.exports = {
             if (! user) {
                 result.loginStatus = false
             } else {
+
                 validPassword = await bcrypt.compare(loginData.password, user.password)
                 if (! validPassword) {
                     result.loginStatus = false
@@ -512,16 +513,12 @@ module.exports = {
         })
     },
 
-    verifyAdminLogin: async (loginData) => {
-        let state = {}
+    addAdmin: (data) => {
         return new Promise(async (resolve, reject) => {
-            if (loginData.email == "gamerkidnav@gmail.com" && loginData.password == "123") {
-                state.login = true
-                state.adminName = "Naveen Admin"
-            } else {
-                state.login = false
-            }
-            resolve(state)
+            data.password = await bcrypt.hash(data.password, 10)
+            let res = await db.get().collection(collection.ADMINS_COLLECTION).insertOne(data)
+            resolve(res)
+            console.log(res);
         })
     },
 
@@ -614,6 +611,17 @@ module.exports = {
             })
             resolve().toArray()
             console.log(final);
+        })
+    },
+
+    verifyAdminLogin: (data) => {
+        let state = {}
+        return new Promise(async (resolve, reject) => {
+            let admin = await db.get().collection(collection.ADMINS_COLLECTION).findOne({email: data.email})
+            let validPassword = await bcrypt.compare(data.password, admin.password)
+            validPassword ? state.status = true : state.status = false
+            resolve(state.status)
+
         })
     }
 

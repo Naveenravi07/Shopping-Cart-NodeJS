@@ -1,5 +1,5 @@
 * {
-    background-color: #373e98;
+    
 }
 
 .login-container {
@@ -7,11 +7,15 @@
     justify-content: center;
     align-items: center;
     min-height: 90vh;
+    text-align: center;
+
 
 }
-
+.layout-page{
+    background-color: #343a40;
+}
 .login-form {
-    border: 1px solid #00a3ff;
+    border: 1px solid #0b090a;
     box-sizing: border-box;
     border-radius: 50px;
     padding: 25px;
@@ -33,7 +37,7 @@
     font-weight: bold;
     font-size: 32px;
     line-height: 36px;
-    color: #00a3ff;
+    color: #8d99ae;
 }
 
 .login-form h4 {
@@ -50,7 +54,7 @@
 
 .input-section label {
     position: absolute;
-    color: #00a3ff;
+    color: #edf6f9;
     font-size: 15px;
     left: 25px;
     top: 7px;
@@ -62,9 +66,9 @@
     margin: 15px 0;
     padding: 15px 20px;
     width: 100%;
-    border: 1px solid #00a3ff;
+    border: 1px solid #0b090a;
     font-size: 20px;
-    color: #00a3ff;
+    color: #edf6f9;
     box-sizing: border-box;
     background: none;
     border-radius: 50px;
