@@ -5,14 +5,19 @@ var Helpers = require('../Helpers/userHelper')
 var fs = require('fs')
 var productHelpers = require('../Helpers/product-Helpers');
 const userHelper = require('../Helpers/userHelper');
-const {response} = require('express');
 
+function verifyAdminLogin(req,res,next){
+    if(req.session.adminLoginStatus)
+    next()
+    else
+    res.redirect('/admin/login')
+}
 
 router.get('/', async function (req, res, next) {
     if (req.session.adminLoginStatus) {
         let products = await productHelpers.getAllProducts().then((items) => {
             let admin = req.session.admin
-            res.render('admin/admin', {items, admin})
+            res.render('admin/dashboard', {items, admin})
         })
     } else {
         res.redirect('/admin/login')
@@ -20,27 +25,24 @@ router.get('/', async function (req, res, next) {
 });
 
 router.get('/login', async (req, res) => {
-
     console.log(req.session.adminLoginStatus);
     if (req.session.adminLoginStatus) {
         res.redirect('/admin')
-    } else 
+    } else {
         res.render('login/admin-login')
-    
+    }
+
 })
 
 router.post('/login', async (req, res) => {
-    console.log(req.body);
-    await userHelper.verifyAdminLogin(req.body).then((status) => {
-        console.log(status);
-        if (status.login) {
+    await userHelper.verifyAdminLogin(req.body).then((response) => {
+        console.log(response);
+        if (response) {
             req.session.adminLoginStatus = true
-            req.session.admin = status.adminName
             res.redirect('/admin')
         } else {
             req.session.adminLoginStatus = false
             res.redirect('/admin/login')
-
         }
     })
 })
@@ -51,8 +53,8 @@ router.get('/logout', (req, res) => {
 })
 
 // Add Products To DB
-router.get('/add-products', (req, res) => {
-    res.render('admin/add-products')
+router.get('/add-products', verifyAdminLogin,(req, res) => {
+    res.render('admin/add-items')
 })
 
 
@@ -91,7 +93,6 @@ router.post('/edit-product/:id', (req, res) => {
             fs.unlink("./public/images/product-images/" + proId + ".jpg", (error) => {
                 if (error) 
                     throw error
-                
                 console.log("error" + error);
             })
             image.mv('./public/images/product-images/' + proId + ".jpg", (err) => {
@@ -117,7 +118,7 @@ router.get('/delete-product/:id', (req, res) => {
     fs.unlink("./public/images/product-images/" + proId + ".jpg", (error) => {
         if (error) 
             throw error
-        
+
     })
 
 })
@@ -150,8 +151,26 @@ router.post('/shipItem', async (req, res) => {
     res.json(response)
 })
 
-router.get('/test',(req,res)=>{
-    res.render('admin/dashboard')
+
+router.get('/view-products', async (req, res) => {
+    if (req.session.adminLoginStatus) {
+        let products = await productHelpers.getAllProducts().then((items) => {
+            let admin = req.session.admin
+            res.render('admin/admin', {items, admin})
+        })
+    } else {
+        res.redirect('/admin/login')
+    }
+})
+
+router.get('/add-admin', (req, res) => {
+    res.render('admin/add-admin')
+})
+
+router.post('/add-admin', (req, res) => {
+    console.log(req.body);
+    Helpers.addAdmin(req.body).then((response) => {
+        console.log(response);
+    })
 })
 module.exports = router;
-

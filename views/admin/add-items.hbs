@@ -1,0 +1,92 @@
+{{>admin-leftpane}}
+            <!-- / Menu -->
+            <div class="layout-page">
+                <div class="content-wrapper">
+                    <div class="login-container">
+                        <div class="login-form">
+                            <h1>ADD PRODUCT</h1>
+                            <form action="/admin/add-products" enctype="multipart/form-data" method="POST">
+                                <div class="input-section">
+                                    <input type="text" name="name" required>
+                                    <label>Name</label>
+                                </div>
+                                <div class="input-section">
+                                    <label>Brand</label>
+                                    <input type="text" name="brand" required>
+                                </div>
+                                <div class="input-section">
+                                    <label>Category</label>
+                                    <input type="text" name="category" required>
+                                </div>
+                                <div class="input-section">
+                                    <label>Description</label>
+                                    <input type="text" name="description" required>
+                                </div>
+                                <div class="input-section">
+                                    <label>Price</label>
+                                    <input type="text" name="price" required>
+                                </div>
+                                <img src="" style="width: 100px;" id="prodimage1">
+                                <div class="input-section">
+                                    <label>Image 1</label>
+                                    <input type="file" name="image" required>
+                                </div>
+
+                                <input type="submit" value="Add">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <link rel="stylesheet" href="/stylesheets/style.css">
+        </div>
+    </div>
+</body>
+
+  <script src="/vendor/libs/jquery/jquery.js"></script>
+  <script src="/vendor/libs/popper/popper.js"></script>
+  <script src="/vendor/js/bootstrap.js"></script>
+  <script src="/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+  <script src="/vendor/js/menu.js"></script>
+  <!-- endbuild -->
+
+  <!-- Vendors JS -->
+  <script src="/vendor/libs/apex-charts/apexcharts.js"></script>
+
+  <!-- Main JS -->
+  <script src="/javascripts/main.js"></script>
+
+  <!-- Page JS -->
+  <script src="/javascripts/dashboards-analytics.js"></script>
+
+  <!-- Place this tag in your head or just before your close body tag. -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+</body>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="/vendor/fonts/boxicons.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+
+    <link rel="stylesheet" href="/vendor/libs/apex-charts/apex-charts.css" />
+
+    <!-- Page CSS -->
+
+    <!-- Helpers -->
+    <script src="/vendor/js/helpers.js"></script>
+        <script src="/javascripts/bootstrap.js"></script>
+
+      <script src="/javascripts/menu.js"></script>
