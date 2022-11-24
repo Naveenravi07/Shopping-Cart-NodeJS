@@ -11,9 +11,9 @@ const fileUpload=require('express-fileupload')
 require('dotenv').config()
 //Db Connection
 db.connect((err) => {
-  if (err) return console.log('Connection To Db Failed' + err+ process.env.DB_PORT);
+  if (err) return console.log('Connection To Db Failed' + err);
   else {
-    console.log("Database Connected Successfully To Port "+process.env.DB_PORT);
+    console.log("Database Connected Successfully To Port ");
   }
 })
 

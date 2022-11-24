@@ -5,7 +5,7 @@ const state = {
 };
 
 module.exports.connect = (done) => {
-    const url = `mongodb://${process.env.DB_URL}:${process.env.DB_PORT}`;
+    const url = `mongodb://${process.env.DB_URL}`;
     const dbname = 'ShastriCart';
 
     mongoClient.connect(url, (err, data) => {
