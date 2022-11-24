@@ -8,12 +8,12 @@ const db = require('./config/dbConnect')
 const session = require('express-session')
 var MongoStore = require('connect-mongodb-session')(session);
 const fileUpload=require('express-fileupload')
-
+require('dotenv').config()
 //Db Connection
 db.connect((err) => {
-  if (err) return console.log('Connection To Db Failed' + err);
+  if (err) return console.log('Connection To Db Failed' + err+ process.env.DB_PORT);
   else {
-    console.log("Database Connected Successfully To Port 27017");
+    console.log("Database Connected Successfully To Port "+process.env.DB_PORT);
   }
 })
 
